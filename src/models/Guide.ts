@@ -28,7 +28,8 @@ const CampSchema: Schema<Camp> = new Schema({
         type: String,
         required: true
     }
-});
+},
+{timestamps: true});
 
 
 const CampModel = (mongoose.models.Camp as mongoose.Model<Camp>) || (mongoose.model<Camp>("Camp", CampSchema));

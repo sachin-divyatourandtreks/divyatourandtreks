@@ -1,0 +1,87 @@
+"use server";
+
+import dbConnect from "@/lib/dbConnect";
+import User from "@/models/User";
+import { verifySession } from "@/lib/authGuard";
+
+export const getUserInfo = async (token: string) => {
+  try {
+    const uid = await verifySession(token);
+
+    await dbConnect();
+
+    const user = await User.findOne({ uid });
+    if (!user) return null;
+
+    return JSON.parse(JSON.stringify(user));
+  } catch (error: any) {
+    console.error("Error fetching user info:", error);
+    throw new Error(error.message || "Failed to fetch user info");
+  }
+};
+
+export const createUser = async (token: string, userData: any) => {
+  try {
+    const uid = await verifySession(token);
+
+    if (userData.uid !== uid) {
+      throw new Error("Forbidden: UID mismatch");
+    }
+
+    await dbConnect();
+
+    const existingUser = await User.findOne({ uid });
+    if (existingUser) {
+      return JSON.parse(JSON.stringify(existingUser));
+    }
+
+    const newUser = await User.create(userData);
+    return JSON.parse(JSON.stringify(newUser));
+  } catch (error: any) {
+    console.error("Error creating user:", error);
+    throw new Error(error.message || "Failed to create user");
+  }
+};
+
+export const updateInfo = async (token: string, data: any) => {
+
+  try {
+    const uid = await verifySession(token);
+
+    await dbConnect();
+
+    const updatedUser = await User.findOneAndUpdate(
+      { uid },
+      { $set: data },
+      { new: true, runValidators: true } 
+    );
+
+    if (!updatedUser) {
+      throw new Error("User not found or update failed");
+    }
+
+    return JSON.parse(JSON.stringify(updatedUser));
+  } catch (error: any) {
+    console.error("Error updating user info:", error);
+    throw new Error(error.message || "Failed to update user info");
+  }
+};
+
+export const deleteUser = async (token: string) => {
+  try {
+    const uid = await verifySession(token);
+
+    await dbConnect();
+    
+    const deletedUser = await User.findOneAndDelete({ uid });
+
+    if (!deletedUser) {
+      throw new Error("User not found");
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error deleting user:", error);
+    throw new Error(error.message || "Failed to delete user");
+  }
+};

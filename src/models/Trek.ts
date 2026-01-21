@@ -1,12 +1,13 @@
-import mongoose, { Schema, Document, Mongoose } from "mongoose";
-import { v4 as uuidv4 } from 'uuid';
+import mongoose, { Schema, Document } from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 export interface Trek extends Document {
     trekId: string;
     destination: string;
-    duration: Number;
+    duration: number;
     descriiption: string;
-    fare: Number
+    fare: number;
+    images: string[];
 }
 
 const TrekSchema: Schema<Trek> = new Schema({
@@ -17,7 +18,7 @@ const TrekSchema: Schema<Trek> = new Schema({
     },
     destination: {
         type: String,
-        required: [true, "destination name is required"]
+        required: [true, "destination name is required"],
     },
     descriiption: {
         type: String,
@@ -25,11 +26,18 @@ const TrekSchema: Schema<Trek> = new Schema({
     },
     fare: {
         type: Number,
-        required: [true, "phone number required"]
-    }
-});
+        required: [true, "fare is required"],
+    },
+    images: {
+        type: [String],
+        required: true,
+        default: [],
+    },
+},
+{timestamps: true});
 
-
-const TrekModel = (mongoose.models.Trek as mongoose.Model<Trek>) || (mongoose.model<Trek>("Trek", TrekSchema));
+const TrekModel =
+    (mongoose.models.Trek as mongoose.Model<Trek>) ||
+    mongoose.model<Trek>("Trek", TrekSchema);
 
 export default TrekModel;
