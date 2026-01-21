@@ -1,8 +1,13 @@
+import { redirect } from 'next/navigation';
+import { trekName } from '@/constants/redirectTrekName';
 
-export default function Home() {
+const HomePage = () => {
+  redirect(trekName.Link);
   return (
     <div >
-      trekly home page
+      <span>trekly home page </span>
     </div>
   );
 }
+
+export default HomePage;
