@@ -28,7 +28,8 @@ const ItenararySchema: Schema<Itenarary> = new Schema({
         required: true,
         default: 0
     }
-});
+},
+{timestamps: true});
 
 
 const ItenararyModel = 

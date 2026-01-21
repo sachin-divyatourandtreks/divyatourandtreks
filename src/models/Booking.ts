@@ -32,7 +32,8 @@ const BookingSchema: Schema<Booking> = new Schema({
         type: Date,
         required: true,
     }
-});
+},
+{timestamps: true});
 
 const BookingModel = 
     (mongoose.models.Booking as mongoose.Model<Booking>) || 

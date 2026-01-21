@@ -16,12 +16,14 @@ const CampSchema: Schema<Camp> = new Schema({
     },
     name: {
         type: String,
+        unique: true,
         required: true,
     },
     description: {
         type: String
     }
-});
+},
+{timestamps: true});
 
 
 const CampModel = (mongoose.models.Camp as mongoose.Model<Camp>) || (mongoose.model<Camp>("Camp", CampSchema));
