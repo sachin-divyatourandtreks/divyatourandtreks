@@ -10,7 +10,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="w-full px-4 py-3 flex items-center justify-between bg-transparent shadow-sm sticky top-0 z-50">
+    <header className="w-full px-4 py-3 flex items-center justify-between bg-transparent shadow-sm top-0 z-50 absolute">
 
       {/* Left: Logo */}
       <div className="flex items-center gap-2">

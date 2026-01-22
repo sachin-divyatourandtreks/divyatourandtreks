@@ -7,14 +7,9 @@ type Props = {
 
 const Layout = ({children}: Props) => {
   return (
-<<<<<<< HEAD
-    <div className='flex flex-col py-3 px-3 container'>
+    <div className='flex flex-col py-15 px-3 container'>
       <UserTabs />
       {children}
-=======
-    <div className='flex flex-col container'>
-        {children}
->>>>>>> 7629eac (trek page created)
     </div>
   )
 }

@@ -1,41 +1,6 @@
-<<<<<<< HEAD
 import { redirect } from 'next/navigation';
 import { trekName } from '@/constants/redirectTrekName';
 
 export default function trekpage() {
   redirect(trekName.Link);
-=======
-import {
-  TrekHero,
-  TrekMetaBar,
-  TrekOverview,
-  TrekInclusions,
-  TrekGallery,
-  TrekBookingCard,
-  TrekEnquiryForm
-} from "@/components/trek"
-import { TrekItinerary } from "@/components/trek/TrekItinerary"
-
-export default function TrekDetailPage() {
->>>>>>> 7629eac (trek page created)
-  return (
-    <>
-      <TrekHero />
-      <TrekMetaBar />
-
-      <main className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
-          <TrekOverview />
-          {/* <TrekInclusions /> */}
-          <TrekItinerary />
-          <TrekGallery />
-        </div>
-
-        <div className="lg:block sticky top-24 h-fit space-y-6">
-          <TrekBookingCard />
-          <TrekEnquiryForm />
-        </div>
-      </main>
-    </>
-  )
 }
