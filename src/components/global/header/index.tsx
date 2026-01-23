@@ -80,10 +80,6 @@ const Header = () => {
               <Phone size={18} /> Call Us
             </button>
 
-            {/* Mobile Login */}
-            <button className="bg-[#e67e22] hover:bg-[#d35400] text-white py-2 rounded-md font-semibold transition shadow mt-2">
-              Login
-            </button>
           </div>
         </div>
       )}
