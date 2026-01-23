@@ -2,6 +2,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Header from "@/components/global/header";
 import BackgroundImage from "@/components/global/bggroundImage";
+import WhatsAppFloatingButton from "@/components/global/whatsappButton";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -17,6 +18,7 @@ export default function RootLayout({
         <BackgroundImage />
         <Header />
         {children}
+        <WhatsAppFloatingButton />
       </body>
     </html>
   );

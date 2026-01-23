@@ -8,7 +8,7 @@ export function TrekOverview() {
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-gray-900">About the Trek</h2>
         <p className="text-gray-600 leading-relaxed">
-          <span className="font-semibold text-gray-900">Nag Tibba</span> ("Serpent’s Peak") 
+          <span className="font-semibold text-gray-900">Nag Tibba</span> ("Serpent's Peak") 
           stands as the highest summit in the lower Himalayas of Uttarakhand. 
           Whether you are a first-time trekker or looking to witness magical 
           snowfall on a weekend, this trek is your perfect escape.

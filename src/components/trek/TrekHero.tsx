@@ -5,6 +5,11 @@ import { Button } from "@/components/ui/button"
 import { TrekMetaBar } from "./TrekMetaBar"
 
 export function TrekHero() {
+  const scrollToSection = () => {
+    document
+      .getElementById("EnquiryForm")
+      ?.scrollIntoView({ behavior: "smooth", block: "end" });
+  };
   return (
     <section className="relative h-[70vh] w-full">
       <Image
@@ -35,7 +40,10 @@ export function TrekHero() {
         </p>
 
         <div className="mt-8 flex gap-4">
-          <Button className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-6 text-lg font-semibold rounded-lg transition-all">
+          <Button 
+            onClick={scrollToSection}
+            className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-6 text-lg font-semibold rounded-lg transition-all"
+          >
             Enquire Now
           </Button>
           {/* <TrekMetaBar/> */}

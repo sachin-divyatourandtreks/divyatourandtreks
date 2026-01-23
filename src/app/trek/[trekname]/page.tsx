@@ -23,7 +23,7 @@ export default function TrekDetailPage() {
           <TrekGallery />
         </div>
 
-        <div className="lg:block sticky top-12 h-fit space-y-6">
+        <div className="lg:block sticky top-7 h-fit space-y-6">
           <TrekBookingCard />
           <TrekEnquiryForm />
         </div>
