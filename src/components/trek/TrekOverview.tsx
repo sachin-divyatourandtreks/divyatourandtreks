@@ -7,15 +7,15 @@ export function TrekOverview() {
       {/* --- 1. NEW: Trek Description (From your text) --- */}
       <section className="space-y-4">
         <h2 className="text-2xl font-bold text-gray-900">About the Trek</h2>
-        <p className="text-gray-600 leading-relaxed">
-          <span className="font-semibold text-gray-900">Nag Tibba</span> ("Serpent's Peak") 
+        <p className="text-black leading-relaxed">
+          <span className="font-semibold text-black">Nag Tibba</span> ("Serpent's Peak") 
           stands as the highest summit in the lower Himalayas of Uttarakhand. 
           Whether you are a first-time trekker or looking to witness magical 
           snowfall on a weekend, this trek is your perfect escape.
         </p>
-        <p className="text-gray-600 leading-relaxed">
+        <p className="text-black leading-relaxed">
           From the summit, you are rewarded with a majestic 360-degree view of Himalayan giants 
-          like <span className="font-medium text-gray-900">Swargarohini, Bandarpoonch, and Nanda Devi</span>. 
+          like <span className="font-semibold text-gray-900">Swargarohini, Bandarpoonch, and Nanda Devi</span>. 
           The trail takes you through dense oak and rhododendron forests, offering a true 
           wilderness experience just a short drive from Dehradun.
         </p>
@@ -45,7 +45,7 @@ export function TrekOverview() {
       <div className="space-y-8 border-t pt-8">
         <section className="space-y-4">
           <h2 className="text-2xl font-bold text-gray-900">Experience the Magic of the Himalayas</h2>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-black leading-relaxed">
             At <span className="font-semibold text-orange-600">Divya Tour and Treks</span>, 
             we specialize in turning a simple trek into a life-changing adventure. Based in the 
             heart of the Garhwal region, our Nag Tibba expeditions are designed for everyone—from 
