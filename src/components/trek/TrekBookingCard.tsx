@@ -5,6 +5,7 @@ import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import toast from "react-hot-toast";
 
 export function TrekBookingCard() {
   const router = useRouter();
@@ -51,14 +52,14 @@ export function TrekBookingCard() {
         
         if(res.ok){
           console.log("Booking registered Successfully");
-          router.push("/user/profile");
+          toast.success("Booking registered successfully.");
         } else {
           console.error("Booking failed: ", result);
-          alert(result.message || "Something went wrong, please try again!!");
+          toast.error(result.message || "Something went wrong, please try again!!");
         }
     } catch(error: any){
       console.error("Network Error : ", error);
-      alert("Network error. Please try again.");
+      toast.error("Network error. Please try again.");
     } finally {
       setLoading(false);
     }

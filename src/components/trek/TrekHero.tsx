@@ -1,10 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { TrekMetaBar } from "./TrekMetaBar"
 
 export function TrekHero() {
+  const [priceHovering, setHovering] = useState(false);
+
   const scrollToSection = () => {
     document
       .getElementById("EnquiryForm")
@@ -46,7 +49,17 @@ export function TrekHero() {
           >
             Enquire Now
           </Button>
-          {/* <TrekMetaBar/> */}
+
+          <Button 
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+            className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-6 text-lg font-semibold rounded-lg transition-all"
+          >
+            <span className="text-orange-200">₹</span>
+            2500 <span className="text-gray-200 text-sm">/ person</span>
+          </Button>
+
+          <span className={`text-gray-900 text-sm ${priceHovering ? "": "hidden"}`}>Make sure to contact through whatsapp before payment</span>
         </div>
       </div>
 
