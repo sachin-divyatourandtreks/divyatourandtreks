@@ -16,100 +16,69 @@ interface UpdateTrekParams extends Partial<CreateTrekParams> {
   trekId: string;
 }
 
-
 export const getAllTrekInfo = async () => {
-  try {
-    await dbConnect();
-
-    const treks = await Trek.find({}).sort({ createdAt: -1 });
-
-    return JSON.parse(JSON.stringify(treks));
-  } catch (error: any) {
-    console.error("Error fetching treks:", error);
-    throw new Error(error.message || "Failed to fetch treks");
-  }
+  await dbConnect();
+  const treks = await Trek.find({}).sort({ createdAt: -1 });
+  return JSON.parse(JSON.stringify(treks));
 };
 
+export const createTrek = async (data: CreateTrekParams) => {
+  await dbConnect();
 
-export const createTrek = async (trekData: CreateTrekParams) => {
-  try {
-    await dbConnect();
-
-    const newTrek = await Trek.create(trekData);
-
-    return JSON.parse(JSON.stringify(newTrek));
-  } catch (error: any) {
-    console.error("Error creating trek:", error);
-    throw new Error(error.message || "Failed to create trek");
+  if (!data.destination || !data.description || !data.duration || !data.fare) {
+    throw new Error("All required fields must be provided");
   }
+
+  const trek = await Trek.create(data);
+  return JSON.parse(JSON.stringify(trek));
 };
 
 export const updateTrekInfo = async (data: UpdateTrekParams) => {
-  try {
-    if (!data.trekId) {
-        throw new Error("Trek ID is required for updates");
-    }
-
-    await dbConnect();
-
-    const updatedTrek = await Trek.findOneAndUpdate(
-      { trekId: data.trekId }, 
-      { $set: data },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedTrek) {
-      throw new Error("Trek not found");
-    }
-
-    return JSON.parse(JSON.stringify(updatedTrek));
-  } catch (error: any) {
-    console.error("Error updating trek:", error);
-    throw new Error(error.message || "Failed to update trek");
+  if (!data.trekId) {
+    throw new Error("Trek ID is required");
   }
+
+  await dbConnect();
+
+  const updatedTrek = await Trek.findOneAndUpdate(
+    { trekId: data.trekId },
+    { $set: data },
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedTrek) {
+    throw new Error("Trek not found");
+  }
+
+  return JSON.parse(JSON.stringify(updatedTrek));
 };
 
-export const deleteTrek = async (trekName: string) => {
-  try {
-    await dbConnect();
+export const deleteTrek = async (trekId: string) => {
+  await dbConnect();
 
-    const deletedTrek = await Trek.findOneAndDelete({ trekName });
+  const deletedTrek = await Trek.findOneAndDelete({ trekId });
 
-    if (!deletedTrek) {
-      throw new Error("Trek not found");
-    }
-
-    await deleteItenarariesByTrekId(deletedTrek.trekId)
-
-    return { success: true, message: "Trek deleted successfully" };
-  } catch (error: any) {
-    console.error("Error deleting trek:", error);
-    throw new Error(error.message || "Failed to delete trek");
+  if (!deletedTrek) {
+    throw new Error("Trek not found");
   }
-};
 
+  await deleteItenarariesByTrekId(deletedTrek.trekId);
+
+  return { success: true };
+};
 
 export const addImageToTrek = async (trekId: string, imageUrl: string) => {
-  try {
-    if (!trekId || !imageUrl) {
-      throw new Error("Trek ID and Image URL are required");
-    }
+  await dbConnect();
 
-    await dbConnect();
+  const updatedTrek = await Trek.findOneAndUpdate(
+    { trekId },
+    { $push: { images: imageUrl } },
+    { new: true }
+  );
 
-    const updatedTrek = await Trek.findOneAndUpdate(
-      { trekId },
-      { $push: { images: imageUrl } },
-      { new: true }
-    );
-
-    if (!updatedTrek) {
-      throw new Error("Trek not found");
-    }
-
-    return JSON.parse(JSON.stringify(updatedTrek));
-  } catch (error: any) {
-    console.error("Error adding image to trek:", error);
-    throw new Error(error.message || "Failed to add image");
+  if (!updatedTrek) {
+    throw new Error("Trek not found");
   }
+
+  return JSON.parse(JSON.stringify(updatedTrek));
 };

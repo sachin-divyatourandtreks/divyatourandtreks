@@ -5,7 +5,7 @@ export interface Trek extends Document {
     trekId: string;
     destination: string;
     duration: number;
-    descriiption: string;
+    description: string;
     fare: number;
     images: string[];
 }
@@ -20,7 +20,11 @@ const TrekSchema: Schema<Trek> = new Schema({
         type: String,
         required: [true, "destination name is required"],
     },
-    descriiption: {
+    duration: {
+        type: Number,
+        required: [true, "duration of trek is required"],
+    },
+    description: {
         type: String,
         required: true,
     },

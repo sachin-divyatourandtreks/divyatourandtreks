@@ -6,11 +6,12 @@ import { verifySession } from "@/lib/authGuard";
 
 export const getUserInfo = async (token: string) => {
   try {
-    const uid = await verifySession(token);
+    const uid = await verifySession(token); 
 
     await dbConnect();
 
-    const user = await User.findOne({ uid });
+    const user = await User.findOne({ firebaseId: uid });
+    
     if (!user) return null;
 
     return JSON.parse(JSON.stringify(user));
@@ -24,13 +25,13 @@ export const createUser = async (token: string, userData: any) => {
   try {
     const uid = await verifySession(token);
 
-    if (userData.uid !== uid) {
+    if (userData.firebaseId !== uid) {
       throw new Error("Forbidden: UID mismatch");
     }
 
     await dbConnect();
 
-    const existingUser = await User.findOne({ uid });
+    const existingUser = await User.findOne({ firebaseId: uid });
     if (existingUser) {
       return JSON.parse(JSON.stringify(existingUser));
     }
@@ -44,14 +45,13 @@ export const createUser = async (token: string, userData: any) => {
 };
 
 export const updateInfo = async (token: string, data: any) => {
-
   try {
     const uid = await verifySession(token);
 
     await dbConnect();
 
     const updatedUser = await User.findOneAndUpdate(
-      { uid },
+      { firebaseId: uid },
       { $set: data },
       { new: true, runValidators: true } 
     );
@@ -73,7 +73,7 @@ export const deleteUser = async (token: string) => {
 
     await dbConnect();
     
-    const deletedUser = await User.findOneAndDelete({ uid });
+    const deletedUser = await User.findOneAndDelete({ firebaseId: uid });
 
     if (!deletedUser) {
       throw new Error("User not found");

@@ -1,20 +1,127 @@
+"use client"
+
+import { useState } from "react";
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export function TrekBookingCard() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  
+  // 1. Initialize with empty strings to avoid uncontrolled/null issues
+  const [data, setData] = useState({
+    fullName: "",
+    email: "",
+    phoneNo: "",
+    persons: "",
+    amount: "",
+    startDate: ""
+  });
+
+  const handleBooking = async () => {
+    setLoading(true);
+    try {
+        const user = auth.currentUser;
+        if(!user){
+          alert("You must be logged in to book.");
+          router.push('/login');
+          return 
+        }
+        
+        const token = await user.getIdToken();
+        
+        // 2. Use relative path (fix env issue)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/bookings`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-type" : "application/json",
+          },
+          body: JSON.stringify({
+            ...data,
+            persons: Number(data.persons),
+            amount: Number(data.amount),
+            userId: user.uid
+          })
+        });
+   
+        const result = await res.json();
+        
+        if(res.ok){
+          console.log("Booking registered Successfully");
+          router.push("/user/profile");
+        } else {
+          console.error("Booking failed: ", result);
+          alert(result.message || "Something went wrong, please try again!!");
+        }
+    } catch(error: any){
+      console.error("Network Error : ", error);
+      alert("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <aside className="rounded-xl border bg-white p-6 shadow-sm">
       <h3 className="text-xl font-semibold mb-4">Book Your Trek</h3>
 
       <div className="space-y-3">
-        <Input placeholder="Full Name" />
-        <Input placeholder="Email Address" />
-        <Input placeholder="Phone Number" />
-        <Input type="date" />
+        <Input 
+          name="fullName"
+          placeholder="Full Name"
+          required
+          value={data.fullName}
+          onChange={(e)=> setData({...data, fullName: e.target.value})} 
+        />
+        <Input 
+          name="email"
+          type="email"
+          placeholder="Email Address"
+          required
+          value={data.email}
+          onChange={(e)=> setData({...data, email: e.target.value})}  
+        />
+        <Input 
+          name="phoneNo"
+          type="tel"
+          placeholder="Phone Number" 
+          required
+          value={data.phoneNo}
+          onChange={(e)=> setData({...data, phoneNo: e.target.value})} 
+        />
+        <Input 
+          name="persons"
+          type="number"
+          placeholder="No. of People" 
+          required
+          value={data.persons}
+          onChange={(e)=> setData({...data, persons: e.target.value})} 
+        />
+        <Input 
+          name="amount"
+          type="number"
+          placeholder="Total Fare" 
+          required
+          value={data.amount}
+          onChange={(e)=> setData({...data, amount: e.target.value})} 
+        />
+        <Input 
+          type="date" 
+          required
+          value={data.startDate}
+          onChange={(e)=> setData({...data, startDate: e.target.value})} 
+        />
       </div>
 
-      <Button className="mt-4 w-full bg-orange-600 hover:bg-orange-700">
-        Book Now
+      <Button 
+          onClick={handleBooking} 
+          disabled={loading}
+          className="mt-4 w-full bg-orange-600 hover:bg-orange-700"
+        >
+        {loading ? "Processing..." : "Book Now"}
       </Button>
     </aside>
   )

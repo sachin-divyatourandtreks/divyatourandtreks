@@ -48,6 +48,15 @@ export default function SignUpPage() {
               required
               className={`h-11 ${state?.errors?.email ? "border-red-500" : ""}`}
             />
+
+            <Input
+              name="phoneNo"
+              type="tel"
+              placeholder="Phone Number*"
+              required
+              className={`h-11 ${state?.errors?.phoneNo ? "border-red-500" : ""}`}
+            />
+
             
             <Input
               name="password"
