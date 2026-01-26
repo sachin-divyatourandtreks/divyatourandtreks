@@ -91,7 +91,7 @@ export default function LoginPage() {
               <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
               <input 
                 name="email" 
-                type="number" 
+                type="email" 
                 placeholder="Enter your email"
                 required 
                 className="text-black block w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all outline-none" 

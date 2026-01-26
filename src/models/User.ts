@@ -1,10 +1,11 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { number } from "zod";
 
 export interface User extends Document {
     firebaseId: string;
     fullName: string;
     username: string;
-    phoneNo?: string;
+    phoneNo: string;
     email: string;
 }
 
@@ -28,6 +29,11 @@ const UserSchema: Schema<User> = new Schema({
         unique: true,
         lowercase: true, 
         match: [/.+\@.+\..+/, 'please use a valid email address']
+    },
+    phoneNo: {
+        type: String,
+        required: [true, "Phone No. is required!!"],
+        unique: true
     }
 }, { timestamps: true }); 
 
