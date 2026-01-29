@@ -1,5 +1,6 @@
 "use server";
 
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import User from "@/models/User";
 import { verifySession } from "@/lib/authGuard";
@@ -57,13 +58,20 @@ export const updateInfo = async (token: string, data: any) => {
     );
 
     if (!updatedUser) {
-      throw new Error("User not found or update failed");
+      console.log("User not found or update failed");
+      return NextResponse.json(
+            { success: false, message: "User not found or update failed" },
+            { status: 400 }
+      );
     }
 
     return JSON.parse(JSON.stringify(updatedUser));
   } catch (error: any) {
     console.error("Error updating user info:", error);
-    throw new Error(error.message || "Failed to update user info");
+    return NextResponse.json(
+          { success: false, message: error.message || "Failed to update user info" },
+          { status: 400 }
+    );
   }
 };
 
