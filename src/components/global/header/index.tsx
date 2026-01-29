@@ -58,9 +58,9 @@ const Header = () => {
       <div className="flex items-center gap-4">
 
         {/* Phone Icon (Desktop Only) */}
-        <div className="hidden lg:flex items-center border-r border-gray-300 pr-4">
+        <div className="hidden lg:flex items-center border-r border-gray-300 pr-4 ">
           <button 
-            className="hover:scale-110 transition-transform text-gray-700"
+            className="hover:scale-110 transition-transform text-white bg-black p-2 rounded-full"
             onClick={() => setContactDetailsOpen(true)}
           >
             <Phone size={20} />
@@ -73,6 +73,13 @@ const Header = () => {
           onClick={() => {router.push('/login')}}
           >
           Login
+        </button>
+
+        <button 
+          className={`bg-[#e67e22] hover:bg-[#d35400] text-white px-5 py-2 rounded-md font-semibold transition shadow ${isLoggedIn? "": "hidden"}`} 
+          onClick={() => {router.push('/logout')}}
+          >
+          Logout
         </button>
 
         {/* Mobile Menu Button */}

@@ -1,9 +1,9 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { tabs } from "@/constants/links";
+import { Tab } from "@/types/links";
 
-const UserTabs = () => {
+const UserTabs = ({ tabs }: { tabs: Tab[] }) => {
   const router = useRouter();
   const pathname = usePathname();
 

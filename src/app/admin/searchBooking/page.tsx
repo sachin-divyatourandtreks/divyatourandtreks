@@ -1,9 +1,12 @@
-const SeearchBookingPage = () => {
+import TrekTableFiltered from "@/components/global/admin/TrekTableFiltered";
+import { bookings } from "@/constants/bookedData"
+
+const SearchBookingPage = () => {
   return (
     <div>
-      search booking page
+      <TrekTableFiltered bookings={bookings} />
     </div>
   )
 }
 
-export default SeearchBookingPage;
+export default SearchBookingPage;

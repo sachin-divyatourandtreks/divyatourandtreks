@@ -1,17 +1,18 @@
 import React from 'react';
 import UserTabs from '@/components/global/UserTab';
+import { profileTabs } from "@/constants/links";
 
 type Props = {
     children: React.ReactNode
 }
 
-const Layout = ({children}: Props) => {
+const UserLayout = ({children}: Props) => {
   return (
     <div className='flex flex-col py-15 px-3 container'>
-      <UserTabs />
+      <UserTabs tabs={profileTabs} />
       {children}
     </div>
   )
 }
 
-export default Layout;
+export default UserLayout;
