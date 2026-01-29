@@ -69,7 +69,7 @@ const Header = () => {
 
         {/* Login Button */}
         <button 
-          className={`bg-[#e67e22] hover:bg-[#d35400] text-white px-5 py-2 rounded-md font-semibold transition shadow ${isLoggedIn? "": ""}`} 
+          className={`bg-[#e67e22] hover:bg-[#d35400] text-white px-5 py-2 rounded-md font-semibold transition shadow ${isLoggedIn? "hidden": ""}`} 
           onClick={() => {router.push('/login')}}
           >
           Login

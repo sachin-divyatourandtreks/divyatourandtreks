@@ -44,9 +44,8 @@ async function getUserProfile(): Promise<UserProfile | null> {
 export default async function ProfilePage() {
   const cookieStore = await cookies();
   const token = cookieStore.get('session')?.value;
-  
   const user = await getUserProfile();
-
+  console.log("Fetched user profile:", user);
   if (!user) return <div>Please log in.</div>;
 
   return (
