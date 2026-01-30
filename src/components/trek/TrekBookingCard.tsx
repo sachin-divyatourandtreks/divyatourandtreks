@@ -6,12 +6,49 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+
+type BookingData = {
+  fullName: string;
+  email: string;
+  phoneNo: string;
+  persons: string | number;
+  amount: string | number;
+  startDate: string;
+};
+
+const createBooking = async (formData: BookingData) => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("You must be logged in to book.");
+
+  const token = await user.getIdToken();
+
+  const res = await fetch('/api/bookings', {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      ...formData,
+      persons: Number(formData.persons),
+      amount: Number(formData.amount),
+      userId: user.uid,
+    }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.message || "Something went wrong!!");
+  }
+
+  return res.json();
+};
 
 export function TrekBookingCard() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
-
   const [data, setData] = useState({
     fullName: "",
     email: "",
@@ -20,49 +57,26 @@ export function TrekBookingCard() {
     amount: "",
     startDate: ""
   });
+  const queryClient = useQueryClient();
 
-
-  const handleBooking = async () => {
-    setLoading(true);
-    try {
-        const user = auth.currentUser;
-        if(!user){
-          alert("You must be logged in to book.");
-          router.push('/login');
-          return 
-        }
-        
-        const token = await user.getIdToken();
-        
-        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/bookings`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-type" : "application/json",
-          },
-          body: JSON.stringify({
-            ...data,
-            persons: Number(data.persons),
-            amount: Number(data.amount),
-            userId: user.uid
-          })
-        });
-   
-        const result = await res.json();
-        
-        if(res.ok){
-          console.log("Booking registered Successfully");
-          toast.success("Booking registered successfully.");
-        } else {
-          console.error("Booking failed: ", result);
-          toast.error(result.message || "Something went wrong, please try again!!");
-        }
-    } catch(error: any){
-      console.error("Network Error : ", error);
-      toast.error("Network error. Please try again.");
-    } finally {
-      setLoading(false);
+  // 2. Define the mutation
+  const { mutate, isPending } = useMutation({
+    mutationFn: createBooking,
+    onSuccess: () => {
+      toast.success("Booking registered successfully.");
+      queryClient.invalidateQueries({ queryKey: ['treks'] });
+      setData({ fullName: "", email: "", phoneNo: "", persons: "", amount: "", startDate: "" });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+      if (error.message.includes("logged in")) {
+        router.push('/login');
+      }
     }
+  });
+
+  const handleBooking = () => {
+    mutate(data);
   };
 
   return (
@@ -75,7 +89,7 @@ export function TrekBookingCard() {
              ⚠️ Check for group discounts & availability first!
           </span>
           <a 
-            href="https://wa.me/916397658576?text=Hi,%20I%20want%20to%20confirm%20availability%20for%20a%20trek" 
+            href={`https://wa.me/${process.env.ADMIN_PHONE_NUMBER}?text=Hi,%20I%20want%20to%20confirm%20availability%20for%20a%20trek`}
             target="_blank" 
             rel="noopener noreferrer"
             className="text-xs font-bold text-amber-700 underline hover:text-amber-900 w-fit"
@@ -153,10 +167,10 @@ export function TrekBookingCard() {
 
       <Button 
           onClick={handleBooking} 
-          disabled={loading}
+          disabled={isPending}
           className="mt-4 w-full bg-orange-600 hover:bg-orange-700"
         >
-        {loading ? "Processing..." : "Book Now"}
+        {isPending ? "Processing..." : "Book Now"}
       </Button>
     </aside>
   )

@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import authAdmin from '@/lib/firebase-admin';
 import { verifySession } from './lib/authGuard';
 import { getAuth } from "firebase-admin/auth";
+import { auth } from './lib/firebase';
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
 
@@ -30,12 +31,14 @@ export async function protectRoute(request: NextRequest) {
 
   // 2. Authentication Logic
   const token = request.cookies.get('session')?.value;
-
+  
   // Check against the actual paths defined in your matcher
   if (pathname.startsWith('/user') || pathname.startsWith('/admin') || pathname.startsWith('/api')) {
+    console.log(pathname, "is being accessed");
     try {
-      const auth = getAuth();
-      const decodedToken = await auth.verifyIdToken(token || '');
+      console.log("Verifying token:", token);
+      const decodedToken = await verifySession(token || '');
+      console.log("Decoded Token:", decodedToken);
       if (!decodedToken) {
         const loginUrl = new URL('/login', request.url);
         loginUrl.searchParams.set('callbackUrl', pathname);
@@ -43,7 +46,9 @@ export async function protectRoute(request: NextRequest) {
       }
 
       if( pathname.startsWith('/admin')) {
-        if(decodedToken.email !== process.env.ADMIN_EMAIL) {
+        const auth = getAuth();
+        const userRecord = await auth.getUser(decodedToken);
+        if(userRecord.email !== process.env.ADMIN_EMAIL) {
           return new NextResponse('Forbidden', { status: 403 });
         }
       }

@@ -10,7 +10,15 @@ interface EnquiryData {
     message: string;
 }
 
-export async function handleEnquiryAction(formData: FormData) {
+export type ActionState =
+  | { success: true }
+  | { error: string }
+  | null;
+
+export async function handleEnquiryAction(
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   try {
     // 1. Extraction with Null Checks
     const fullName = formData.get("fullName");
@@ -38,17 +46,17 @@ export async function handleEnquiryAction(formData: FormData) {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.MAILER_EMAIL,
-        pass: process.env.MAILER_PASSWORD,
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
 
     const mailOptions = {
-      from: process.env.MAILER_EMAIL,
+      from: process.env.SMTP_USER,
       to: process.env.ADMIN_EMAIL,
       subject: `New Trek Enquiry from ${rawData.fullName}`,
       text: `
-        New Enquiry Details:
+        New Enquiry Details:  
         -------------------
         Name: ${rawData.fullName}
         Email: ${rawData.email}

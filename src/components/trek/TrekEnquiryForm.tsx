@@ -5,9 +5,13 @@ import { handleEnquiryAction } from "@/actions/enquiryform";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { ActionState } from "@/actions/enquiryform";
 
 export function TrekEnquiryForm() {
-  const [state, formAction, isPending] = useActionState(handleEnquiryAction, null);
+  const [state, formAction, isPending] = useActionState<ActionState>(
+    handleEnquiryAction,
+    null
+  );
 
   return (
     <aside className="rounded-xl border bg-white p-6 shadow-sm">
