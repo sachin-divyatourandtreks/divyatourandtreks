@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { authAdmin } from '@/lib/firebase-admin'; 
 import dbConnect from '@/lib/dbConnect';
 import User from "@/models/User";
+import admin from 'firebase-admin';
 
 export type SignUpState = {
   message?: string;
@@ -60,6 +61,8 @@ export async function handleSignUp(
 
   let userRecord;
 
+  console.log(admin.app().options.credential.projectId);
+
   try {
     console.log("Firebase signup process started");
     userRecord = await authAdmin.createUser({
@@ -68,7 +71,7 @@ export async function handleSignUp(
       displayName: username,
     });
 
-    console.log("Signed up successfully on firebase");
+    console.log("Signed up successfully on firebase", userRecord);
     await User.create({
       firebaseId: userRecord.uid,
       email,

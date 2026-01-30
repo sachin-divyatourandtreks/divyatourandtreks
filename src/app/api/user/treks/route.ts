@@ -9,7 +9,7 @@ import { bookings }  from "@/constants/bookedData";
 
 export async function GET(req: NextRequest) {
 
-  return NextResponse.json({ success: true, treks: bookings }, { status: 200 });
+  // return NextResponse.json({ success: true, treks: bookings }, { status: 200 });
 
   try {
     await dbConnect();

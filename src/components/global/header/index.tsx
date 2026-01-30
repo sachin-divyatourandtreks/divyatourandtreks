@@ -10,27 +10,15 @@ import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import ContactDetails from "@/components/global/contactDetails";
 import { contacts } from "@/constants/links";
+import { useAuthStore } from "@/zustand-store";
 
 const Header = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [contactDetailsOpen, setContactDetailsOpen] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsLoggedIn(true);
-        console.log("User is logged in:", user.email);
-      } else {
-        setIsLoggedIn(false);
-        console.log("User is logged out");
-      }
-    });
-
-    return () => unsubscribe();
-  }, []); 
+  const isLoggedIn = useAuthStore((state) => state.isLogin);
+  const user = useAuthStore((state) => state.user);
 
   return (
     <header className="w-full px-2 py-1 flex items-center justify-between bg-transparent shadow-sm top-0 z-50 absolute">
@@ -52,6 +40,13 @@ const Header = () => {
             {item.title}
           </Link>
         ))}
+        <Link
+            key="Admin"
+            href="/admin"
+            className={ isLoggedIn && user?.isAdmin ? "hover:text-blue-600 transition-colors" : "hidden"}
+          >
+            Admin
+          </Link>
       </nav>
 
       {/* Right Section */}

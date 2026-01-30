@@ -6,4 +6,5 @@ export type UserProfile = {
   yearsActive: number;
   username: string; 
   token: string;
+  isAdmin: boolean;
 };

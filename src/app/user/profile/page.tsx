@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 import { useQuery } from '@tanstack/react-query';
 import Profile from '@/components/global/profile';
 import { UserProfile } from '@/types/UserProfile';
+import { useAuthStore } from '@/zustand-store';
+import { useEffect } from 'react';
 
 const fetchUserProfile = async (): Promise<UserProfile> => {
   const token = Cookies.get('session');
@@ -32,41 +34,56 @@ const fetchUserProfile = async (): Promise<UserProfile> => {
 };
 
 const ProfilePage = () => {
-  const { data: user, isLoading, isError, error } = useQuery({
-    queryKey: ['userProfile'],
-    queryFn: fetchUserProfile,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    retry: 1,
-  });
+  const login = useAuthStore((state) => state.login);
+  const authUser = useAuthStore((state) => state.user);
+
+  console.log("Zustand Auth User:", authUser);
 
   const token = Cookies.get('session') || "";
 
-  if (isLoading) {
-    return <div className="flex justify-center p-20">Loading adventure data...</div>;
+  const { data: user, isLoading, isError, error } = useQuery({
+    queryKey: ['userProfile'],
+    queryFn: fetchUserProfile,
+    enabled: !!token && !authUser, // ✅ don't refetch if Zustand already has user
+    staleTime: Infinity,
+    retry: 1,
+  });
+
+  // ✅ Sync React Query → Zustand
+  useEffect(() => {
+    if (user && token) {
+      login(user, token);
+    }
+  }, [user, token, login]);
+
+  // Loading UI
+  if (isLoading && !authUser) {
+    return <div className="flex justify-center p-20">Loading profile...</div>;
   }
 
+  // Error UI
   if (isError) {
     return (
       <div className="text-center p-20">
-        <p className="text-black-500">Error: {(error as Error).message}</p>
-      </div>  
+        <p>Error: {(error as Error).message}</p>
+      </div>
     );
   }
 
-  // 3. Render Profile
+  // Prefer Zustand user if exists
+  const finalUser = authUser || user;
+
   return (
     <div>
-      {user && (
+      {finalUser && (
         <Profile
-          fullName={user.name}
-          email={user.email}
-          phoneNo={user.phone}
-          trips={user.trips}
-          yearsActive={user.yearsActive}
-          avatarUrl={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}`}
-          username={user.username || "Mountain Trekker"}
+          fullName={finalUser.name}
+          email={finalUser.email}
+          phoneNo={finalUser.phone}
+          trips={finalUser.trips}
+          yearsActive={finalUser.yearsActive}
+          avatarUrl={`https://ui-avatars.com/api/?name=${encodeURIComponent(finalUser.name)}`}
+          username={finalUser.username || "Mountain Trekker"}
           token={token}
         />
       )}

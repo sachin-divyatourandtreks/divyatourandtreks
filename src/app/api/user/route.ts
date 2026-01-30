@@ -19,16 +19,16 @@ import { getToken } from "@/lib/authGuard";
 // yearsActive={3}
 
 export async function GET(req: NextRequest) {
-  const mockUser = {
-    name: "Dr. Elena Rodriguez",
-    username: "alpine_queen",
-    email: "elena.rod@university.edu",
-    phone: "+34 612 345 678",
-    trips: 15,
-    yearsActive: 3
-  };
+  // const mockUser = {
+  //   name: "Dr. Elena Rodriguez",
+  //   username: "alpine_queen",
+  //   email: "elena.rod@university.edu",
+  //   phone: "+34 612 345 678",
+  //   trips: 15,
+  //   yearsActive: 3
+  // };
 
-  return NextResponse.json({ success: true, user: mockUser }, { status: 200 });
+  // return NextResponse.json({ success: true, user: mockUser }, { status: 200 });
   try {
     await dbConnect();
     const token = getToken(req);
@@ -52,6 +52,7 @@ export async function GET(req: NextRequest) {
       phone: user.phoneNo || "", 
       trips: tripsCount,
       yearsActive: yearsActive,
+      isAdmin: user.email === process.env.ADMIN_EMAIL ? true : false,
     };
 
     return NextResponse.json({ success: true, user: formattedUser }, { status: 200 });

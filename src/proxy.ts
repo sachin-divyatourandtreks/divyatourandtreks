@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import authAdmin from '@/lib/firebase-admin';
+import { verifySession } from './lib/authGuard';
+import { getAuth } from "firebase-admin/auth";
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
 
-export function protectRoute(request: NextRequest) {
+export async function protectRoute(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const origin = request.headers.get('origin');
 
@@ -26,17 +29,30 @@ export function protectRoute(request: NextRequest) {
   }
 
   // 2. Authentication Logic
-  const token = request.cookies.get('auth_token')?.value;
+  const token = request.cookies.get('session')?.value;
 
   // Check against the actual paths defined in your matcher
   if (pathname.startsWith('/user') || pathname.startsWith('/admin') || pathname.startsWith('/api')) {
-    if (!token) {
-      // Create redirect URL relative to the request base
+    try {
+      const auth = getAuth();
+      const decodedToken = await auth.verifyIdToken(token || '');
+      if (!decodedToken) {
+        const loginUrl = new URL('/login', request.url);
+        loginUrl.searchParams.set('callbackUrl', pathname);
+        return NextResponse.redirect(loginUrl);
+      }
+
+      if( pathname.startsWith('/admin')) {
+        if(decodedToken.email !== process.env.ADMIN_EMAIL) {
+          return new NextResponse('Forbidden', { status: 403 });
+        }
+      }
+    } catch (error) {
       const loginUrl = new URL('/login', request.url);
-      // Optional: Store the original destination to redirect back after login
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
+
   }
 
   // 3. Append CORS headers to the response of successful requests
@@ -56,8 +72,8 @@ export function proxy(request: NextRequest) {
 // Ensure these match the logic inside your middleware function
 export const config = {
   matcher: [
-    // '/user/:path*', 
-    // '/admin/:path*',
-    // '/api/:path*', 
+    '/user/:path*', 
+    '/admin/:path*',
+    '/api/:path*', 
   ],
 };
