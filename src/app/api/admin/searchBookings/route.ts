@@ -20,7 +20,6 @@ export async function GET(request: Request) {
         const bookingId = searchParams.get('bookingId');
         const username = searchParams.get('username');
         const fromDate = searchParams.get('fromDate');
-        console.log("Received Filters:", { bookingId, username, fromDate });
         const filter: any = {};
 
         if (bookingId) {
@@ -43,12 +42,10 @@ export async function GET(request: Request) {
                 fullName: {$regex: username, $options: 'i' }
             }).select('_id');
             
-            console.log("Matched Users for Username Filter:", users);
             const userIds = users.map(user => user._id);
             filter.userId = { $in: userIds };
         }
 
-        console.log("Constructed Filter:", filter);
         const bookings = await BookingModel.find(filter)
             .populate('userId', 'fullName phoneNo')
             .populate('trekId', 'destination location duration')
@@ -61,15 +58,14 @@ export async function GET(request: Request) {
             location: booking.trekId?.location || "Unknown Location",
             startDate: booking.startDate.toISOString().split('T')[0],
             duration: booking.trekId ? `${booking.trekId.duration} days` : "Unknown Duration",
-            bookingStatus: getBookingStatus(booking.startDate, booking.trekId?.duration || 0, booking.status),
-            status: booking.status,
+            bookingStatus: booking.status,
+            status: getBookingStatus(booking.startDate, booking.trekId?.duration || 0, booking.status),
             peopleCount: booking.persons,
             amountPaid: booking.amount,
             phoneNo: booking.userId?.phoneNo || "N/A"
         }) as TrekHistoryItemAdmin);
 
         const resolvedBookings = await Promise.all(formattedBookings);
-        console.log("Resolved Bookings:", resolvedBookings);
         return NextResponse.json({ data: resolvedBookings }, { status: 200 });
 
     } catch (error) {

@@ -26,7 +26,6 @@ const TrekFilters = ({ filters }: Props) => {
 
   const handleSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
-    console.log("Applying Filters:", draft);
     Object.entries(draft).forEach(([key, value]) => {
       params.set(key, value);
     });

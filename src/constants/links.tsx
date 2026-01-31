@@ -18,7 +18,8 @@ export const adminTabs: Tab[] = [
   { name: "Search Booking", path: "/admin/searchBooking" },
 ];
 
-export const BG_IMAGE_URL = "https://img.freepik.com/premium-vector/climbing-mountains-traveler-top-mountain-looks-beautiful-landscape-mountains-mountain-tourism-travel-hiking-vector_939711-7958.jpg?w=1480";
+export const BG_IMAGE_URL2 = "https://img.freepik.com/premium-vector/hiking-mountain-background_608812-428.jpg?w=1480";
+export const BG_IMAGE_URL = "/bgImage.png";
 
 export const contacts = [
   { label: "Email", value: `${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`, icon: <Mail size={20} /> },

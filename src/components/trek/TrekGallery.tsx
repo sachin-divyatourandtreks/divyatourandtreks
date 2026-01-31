@@ -21,6 +21,10 @@ const images = [
   "/images/img14.jpeg",
   "/images/img15.jpeg",
   "/images/img16.jpeg",
+  "/images/img17.jpeg",
+  "/images/img18.jpeg",
+  "/images/img19.jpeg",
+  "/images/img20.jpeg",
 ]
 
 export function TrekGallery() {

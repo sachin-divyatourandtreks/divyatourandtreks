@@ -42,11 +42,11 @@ export function TrekOverview() {
       </section>
 
       {/* --- 3. EXISTING: Company Intro & Why Us (Your code) --- */}
-      <div className="space-y-8 border-t pt-8">
+      <div className="space-y-8 border-t pt-8 ">
         <section className="space-y-4">
           <h2 className="text-2xl font-bold text-gray-900">Experience the Magic of the Himalayas</h2>
           <p className="text-black leading-relaxed">
-            At <span className="font-semibold text-orange-600">Divya Tour and Treks</span>, 
+            At <span className="font-semibold text-[#E12106] not-prose">Divya Tour and Treks</span>, 
             we specialize in turning a simple trek into a life-changing adventure. Based in the 
             heart of the Garhwal region, our Nag Tibba expeditions are designed for everyone—from 
             first-time trekkers looking for their first summit to seasoned hikers seeking a 
@@ -54,7 +54,7 @@ export function TrekOverview() {
           </p>
         </section>
 
-        <section className="bg-slate-50 rounded-2xl p-6 md:p-8 border border-slate-100">
+        <section className="bg-orange-50/50 p-6 md:p-8 rounded-2xl border border-orange-100">
           <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
             Why Trek With Us?
           </h3>

@@ -41,12 +41,12 @@ const Header = () => {
           </Link>
         ))}
         <Link
-            key="Admin"
-            href="/admin"
-            className={ isLoggedIn && user?.isAdmin ? "hover:text-blue-600 transition-colors" : "hidden"}
-          >
-            Admin
-          </Link>
+          key="Admin"
+          href="/admin"
+          className={ isLoggedIn && user?.isAdmin ? "hover:text-blue-600 transition-colors" : "hidden"}
+        >
+          Admin
+        </Link>
       </nav>
 
       {/* Right Section */}
@@ -102,6 +102,14 @@ const Header = () => {
                 {item.title}
               </Link>
             ))}
+
+            <Link
+              key="Admin"
+              href="/admin"
+              className={ isLoggedIn && user?.isAdmin ? "hover:text-blue-600 transition-colors" : "hidden"}
+            >
+              Admin
+            </Link>
 
             {/* Mobile Phone Button */}
             <button 

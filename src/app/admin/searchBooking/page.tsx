@@ -33,7 +33,6 @@ const fetchSearchBookings = async (
     }
 
     const res = await response.json();
-    console.log("API Response Data:", res);
     return res.data as TrekHistoryItemAdmin[];
   } catch (error) {
     console.error('Error fetching active bookings:', error);
@@ -44,15 +43,11 @@ const fetchSearchBookings = async (
 export default function SearchBookingPage() {
   const searchParams = useSearchParams();
 
-  console.log("Search Params:", searchParams.toString());
-
   const filters = useMemo<Filters>(() => ({
     username: searchParams.get("username") ?? "",
     fromDate: searchParams.get("fromDate") ?? "",
     bookingId: searchParams.get("bookingId") ?? "",
   }), [searchParams]);
-
-  console.log("Filters for Query:", searchParams.toString(), filters);
 
   const hasAnyFilter = Object.values(filters).some(val => val !== "");
 

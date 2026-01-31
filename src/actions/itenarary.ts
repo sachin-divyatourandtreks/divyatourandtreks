@@ -39,10 +39,6 @@ export const deleteItenarariesByTrekId = async (trekId: string) => {
 
     const result = await ItenararyModel.deleteMany({ trekId });
 
-    if (result.deletedCount === 0) {
-        console.log("No itineraries found for this trekId to delete.");
-    }
-
     return { 
         success: true, 
         message: `Successfully deleted ${result.deletedCount} itinerary entries.` 
