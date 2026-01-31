@@ -23,9 +23,7 @@ export function TrekItineraryItem({
                 src={image}
                 alt={title}
                 fill
-                sizes="(max-width: 640px) 100vw,
-                    (max-width: 1024px) 70vw,
-                    33vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 33vw"
                 className="object-cover rounded-lg w-4/5"
             />}
         </div>
