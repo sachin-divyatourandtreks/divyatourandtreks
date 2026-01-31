@@ -3,7 +3,7 @@
 import TrekRow from "./TrekRow"
 import { TrekHistoryItemAdmin } from "@/types/trek"
 
-const TrekTable = ({activeBookings}: {activeBookings: TrekHistoryItemAdmin[]}) => {
+const TrekTable = ({bookings}: {bookings: TrekHistoryItemAdmin[]}) => {
   return (
     <div className="bg-white shadow rounded-lg overflow-y-auto overflow-x-auto">
       <table className="w-full text-sm">
@@ -22,14 +22,14 @@ const TrekTable = ({activeBookings}: {activeBookings: TrekHistoryItemAdmin[]}) =
         </thead>
 
         <tbody>
-          {activeBookings.map((booking) => (
+          {bookings.map((booking) => (
             <TrekRow key={booking.id} booking={booking} />
           ))}
 
-          {activeBookings.length === 0 && (
+          {bookings.length === 0 && (
             <tr>
-              <td colSpan={6} className="text-center py-6 text-gray-500">
-                No active trek bookings
+              <td colSpan={9} className="text-center py-6 text-gray-500">
+                No trek bookings available
               </td>
             </tr>
           )}
