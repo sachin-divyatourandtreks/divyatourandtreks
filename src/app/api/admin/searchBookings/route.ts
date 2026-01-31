@@ -3,6 +3,14 @@ import BookingModel from '@/models/Booking';
 import UserModel from '@/models/User';
 import TrekModel from '@/models/Trek';
 import { NextResponse } from 'next/server';
+import { TrekHistoryItemAdmin } from '@/types/trek';
+import { getBookingStatus } from '@/lib/bookingStatus'
+
+// type Filters = {
+//   username: string;
+//   fromDate: string;
+//   bookingId: string;
+// }
 
 export async function GET(request: Request) {
     try {
@@ -10,45 +18,37 @@ export async function GET(request: Request) {
         const { searchParams } = new URL(request.url);
 
         const bookingId = searchParams.get('bookingId');
-        const customerName = searchParams.get('customerName');
-        const trekDestination = searchParams.get('trekDestination');
+        const username = searchParams.get('username');
         const fromDate = searchParams.get('fromDate');
-        const toDate = searchParams.get('toDate');
-
+        console.log("Received Filters:", { bookingId, username, fromDate });
         const filter: any = {};
 
         if (bookingId) {
             filter.id = bookingId; 
         }
 
-        if (fromDate || toDate) {
-            filter.bookingDate = {};
-            if (fromDate && !isNaN(Date.parse(fromDate)))
-                filter.bookingDate.$gte = new Date(fromDate);
-            if (toDate && !isNaN(Date.parse(toDate)))
-                filter.bookingDate.$lte = new Date(toDate);
+        if (fromDate) {
+            filter.startDate = {};
+            if (fromDate && !isNaN(Date.parse(fromDate))){
+                filter.startDate.$gte = new Date(fromDate);
+                filter.startDate.$lt = new Date(new Date(fromDate).getTime() + 24 * 60 * 60 * 1000);
+            }
+
         }
 
 
-        if (customerName) {
+        if (username) {
             const users = await UserModel.find({
-                fullName: { $regex: customerName, $options: 'i' }
+                username: { $regex: username, $options: 'i' },
+                fullName: {$regex: username, $options: 'i' }
             }).select('_id');
             
+            console.log("Matched Users for Username Filter:", users);
             const userIds = users.map(user => user._id);
             filter.userId = { $in: userIds };
         }
 
-        if (trekDestination) {
-            const treks = await TrekModel.find({
-                destination: { $regex: trekDestination, $options: 'i' }
-            }).select('_id');
-
-            const trekIds = treks.map(trek => trek._id);
-            filter.trekId = { $in: trekIds };
-        }
-
-
+        console.log("Constructed Filter:", filter);
         const bookings = await BookingModel.find(filter)
             .populate('userId', 'fullName phoneNo')
             .populate('trekId', 'destination location duration')
@@ -59,15 +59,18 @@ export async function GET(request: Request) {
             customerName: booking.userId?.fullName || "Unknown Customer",
             trekName: booking.trekId?.destination || "Unknown Trek",
             location: booking.trekId?.location || "Unknown Location",
-            startDate: booking.startDate,
+            startDate: booking.startDate.toISOString().split('T')[0],
             duration: booking.trekId ? `${booking.trekId.duration} days` : "Unknown Duration",
-            bookingStatus: booking.status,
+            bookingStatus: getBookingStatus(booking.startDate, booking.trekId?.duration || 0, booking.status),
+            status: booking.status,
             peopleCount: booking.persons,
             amountPaid: booking.amount,
             phoneNo: booking.userId?.phoneNo || "N/A"
-        }));
+        }) as TrekHistoryItemAdmin);
 
-        return NextResponse.json({ bookings: formattedBookings }, { status: 200 });
+        const resolvedBookings = await Promise.all(formattedBookings);
+        console.log("Resolved Bookings:", resolvedBookings);
+        return NextResponse.json({ data: resolvedBookings }, { status: 200 });
 
     } catch (error) {
         console.error("API Error:", error);

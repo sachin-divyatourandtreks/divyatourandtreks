@@ -1,3 +1,4 @@
+// deprecated, use TrekHistoryItem and TrekHistoryItemAdmin instead
 export type TrekBooking = {
   id: string
   customerName: string
@@ -6,7 +7,7 @@ export type TrekBooking = {
   endDate: string
   status: "Active" | "cancelled" | "completed"
   peopleCount: number
-}
+} 
 
 export type TrekHistoryItem = {
   id: string; 

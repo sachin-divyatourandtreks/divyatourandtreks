@@ -6,6 +6,7 @@ import { Booking } from '@/types/index.types';
 import { Types } from 'mongoose'; 
 import TrekModel from '@/models/Trek';
 import UserModel from '@/models/User';
+import { TrekHistoryItemAdmin } from '@/types/trek';
 
 // export type TrekHistoryItem = {
 //   id: string; 
@@ -45,23 +46,30 @@ export async function GET() {
         const user = await UserModel.findById(userId);
         const trek = await TrekModel.findById(trekId);
 
+        // if(!user || !trek) {
+        //     console.warn(`User or Trek not found for booking ID: ${booking.id}`);
+        //     return null;
+        // }
         return {
             id: booking.id,
             customerName: user?.fullName || "Unknown Customer",
             trekName: trek?.destination || "Unknown Trek",
             location: trek?.location || "Unknown Location",
-            startDate: booking.startDate,
+            startDate: booking.startDate.toISOString().split('T')[0],
             duration: trek ? `${trek.duration} days` : "Unknown Duration",
             bookingStatus: booking.status,
-            status: "Active",
+            status: "Current",
             peopleCount: booking.persons,
             amountPaid: booking.amount,
             phoneNo: user?.phoneNo || "N/A"
-        }
+        } as TrekHistoryItemAdmin;
     });
-
+    console.log("Formatted Bookings Promises:", formattedBookings);
+    const resolvedBookings = await Promise.all(formattedBookings);
+    const validBookings = resolvedBookings.filter(booking => booking !== null) as TrekHistoryItemAdmin[];
+    console.log("Formatted Bookings:", validBookings);
     return NextResponse.json(
-      { success: true, data: activeBookings },
+      { success: true, data: validBookings },
       { status: 200 }
     );
   } catch (error) {

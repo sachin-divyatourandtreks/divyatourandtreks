@@ -3,21 +3,28 @@
 import TrekTable from "@/components/global/admin/TrekTable"
 import { TrekHistoryItemAdmin } from "@/types/trek"
 import { useQuery } from "@tanstack/react-query";
+import Cookies from 'js-cookie';
 import { MOCK_TREK_HISTORY_ADMIN } from "@/constants/bookedData";
 
 const fetchActiveBookings = async (): Promise<TrekHistoryItemAdmin[]> => {
   // Simulate fetching data from an API or database
-  return MOCK_TREK_HISTORY_ADMIN;
+  // return MOCK_TREK_HISTORY_ADMIN;
 
   try {
-    const response = await fetch('/api/admin/activeBookings');
+    const token = Cookies.get('session');
+    const response = await fetch('/api/admin/activeBookings', {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch active bookings');
     }
-    return response.json();
+
+    const res = await response.json();
+    return res.data as TrekHistoryItemAdmin[];
   } catch (error) {
     console.error('Error fetching active bookings:', error);
-    return [];
+    return [] as TrekHistoryItemAdmin[];
   }
 }
 

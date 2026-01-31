@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import Cookies from 'js-cookie';
 
 import TrekFilters from "@/components/global/admin/TrekFilters";
 import TrekTable from "@/components/global/admin/TrekTable";
@@ -10,54 +11,73 @@ import { MOCK_TREK_HISTORY_ADMIN } from "@/constants/bookedData";
 import { TrekHistoryItemAdmin } from "@/types/trek";
 
 type Filters = {
-  UserId: string;
-  Date: string;
-  TrekId: string;
+  username: string;
+  fromDate: string;
+  bookingId: string;
 };
 
 const fetchSearchBookings = async (
   filters: Filters
 ): Promise<TrekHistoryItemAdmin[]> => {
-  // mock for now
-  return MOCK_TREK_HISTORY_ADMIN.filter((booking) => {
-    const matchesUserId = filters.UserId
-      ? booking.id.includes(filters.UserId)
-      : true;
-    const matchesDate = filters.Date
-      ? booking.startDate === filters.Date
-      : true;
-    const matchesTrekId = filters.TrekId
-      ? booking.id.includes(filters.TrekId)
-      : true;
-      
-    return matchesUserId && matchesDate && matchesTrekId;
-  });
-  // real version later
-  // const res = await fetch(`/api/admin/activeBookings?${new URLSearchParams(filters)}`);
-  // if (!res.ok) throw new Error("Failed to fetch");
-  // return res.json();
+  try {
+    const token = Cookies.get('session');
+
+    const queryParams = new URLSearchParams(filters).toString();
+
+    const response = await fetch(`/api/admin/searchBookings?${queryParams}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch active bookings');
+    }
+
+    const res = await response.json();
+    console.log("API Response Data:", res);
+    return res.data as TrekHistoryItemAdmin[];
+  } catch (error) {
+    console.error('Error fetching active bookings:', error);
+    return [] as TrekHistoryItemAdmin[];
+  }
 };
 
 export default function SearchBookingPage() {
   const searchParams = useSearchParams();
 
+  console.log("Search Params:", searchParams.toString());
+
   const filters = useMemo<Filters>(() => ({
-    UserId: searchParams.get("UserId") ?? "",
-    Date: searchParams.get("Date") ?? "",
-    TrekId: searchParams.get("TrekId") ?? "",
+    username: searchParams.get("username") ?? "",
+    fromDate: searchParams.get("fromDate") ?? "",
+    bookingId: searchParams.get("bookingId") ?? "",
   }), [searchParams]);
 
-  const { data: bookings = [] } = useQuery<TrekHistoryItemAdmin[]>({
+  console.log("Filters for Query:", searchParams.toString(), filters);
+
+  const hasAnyFilter = Object.values(filters).some(val => val !== "");
+
+  const { data: bookings = [], isLoading, isError } = useQuery<TrekHistoryItemAdmin[]>({
     queryKey: ["searchBookings", filters],
     queryFn: () => fetchSearchBookings(filters),
-    retry: 1,
+    enabled: hasAnyFilter,
     staleTime: 5 * 60 * 1000,
   });
 
   return (
     <div>
-      <TrekFilters filters={filters} />
-      <TrekTable bookings={bookings} />
+      <Suspense fallback={<div>Loading filters...</div>}>
+        <TrekFilters filters={filters} />
+      </Suspense>
+      {isLoading ? (
+        <div>Loading bookings...</div>
+      ) : isError ? (
+        <div>Error loading bookings. Please try again.</div>
+      ) : bookings.length === 0 ? (
+        <div>No bookings found for the given filters.</div>
+      ) : (
+        <TrekTable bookings={bookings} />
+      )}
+      
     </div>
   );
 }

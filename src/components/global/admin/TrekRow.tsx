@@ -28,7 +28,7 @@ export default function TrekRow({ booking }: Props) {
   return (
     <tr className="border-b hover:bg-gray-50">
       <td className="px-4 py-3 text-gray-500 font-mono text-xs">
-        #{booking.id}
+        {booking.id}
       </td>
       <td className="px-4 py-3">{booking.customerName}</td>
       <td className="px-4 py-3">{booking.phoneNo}</td>

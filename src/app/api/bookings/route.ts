@@ -21,19 +21,21 @@ export async function POST(req: NextRequest) {
        return NextResponse.json({ success: false, message: "Unauthorized: Missing Token" }, { status: 401 });
     }
 
+    
+    const body = await req.json();
+    
     const uid = await verifySession(token);
 
     const user = await UserModel.findOne({ firebaseId: uid });
     
+    
+
     if (!user) {
       return NextResponse.json(
         { success: false, message: "User profile not found. Please register." },
         { status: 404 } 
       );
     }
-
-    const body = await req.json();
-
     let trek;
     if (body.trekId) {
         trek = await TrekModel.findById(body.trekId);
