@@ -6,8 +6,6 @@ export async function adminPendingBookingMail(booking: Booking) {
     const user = await UserModel.findOne({_id: booking.userId});
     const trek = await TrekModel.findOne({_id: booking.trekId});
 
-    console.log("in adminPendingBookingMail fetched user and trek details");
-
     if (!user) {
         throw new Error(`User not found for ID: ${booking.userId}`);
     }
@@ -34,7 +32,6 @@ export async function adminPendingBookingMail(booking: Booking) {
 export async function userBookingConfirmedMail(booking: Booking) {
   const trek = await TrekModel.findOne({_id: booking.trekId});
   if(!trek){
-    console.log("Trek Not Found");
     throw new Error(`Trek not found for ID: ${booking.trekId}`);
   }
 

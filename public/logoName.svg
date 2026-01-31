@@ -1,9 +1,9 @@
 <svg width="300" height="100" viewBox="110 300 300 73" xmlns="http://www.w3.org/2000/svg">
   <g font-family="momo-signature" font-weight="bold">
-    <text x="120" y="345" font-size="55" fill="#f54a00">दिव्य</text>
+    <text x="120" y="345" font-size="55" fill="#E12106">दिव्य</text>
     
-    <text x="255" y="345" font-size="55" fill="#f54a00">Tour</text>
+    <text x="255" y="345" font-size="55" fill="#E12106">Tour</text>
     
-    <text x="180" y="385" font-size="35" fill="#f54a00">&amp; Treks</text>
+    <text x="160" y="385" font-size="55" fill="#E12106">&amp; Treks</text>
   </g>
 </svg>

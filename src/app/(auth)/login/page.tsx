@@ -32,7 +32,6 @@ export default function LoginPage() {
 
   // Helper to handle session and redirect
   const handleAuthSuccess = async (user: any) => {
-    console.log("Processing after successful login");
 
     const token = await user.getIdToken();
 
@@ -71,11 +70,9 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
-    console.log("signin by google");
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log(result.user);
       const token = await result.user.getIdToken();
       Cookies.set('session', token, {
         expires: 1 / 24, // 1 hour

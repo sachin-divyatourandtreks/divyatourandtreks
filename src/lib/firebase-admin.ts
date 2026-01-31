@@ -15,11 +15,6 @@ if (!admin.apps.length) {
   }
 }
 
-// Export the specific tools you'll use in Server Actions
-console.log("Project ID:", process.env.FIREBASE_PROJECT_ID);
-console.log("Client Email:", process.env.FIREBASE_CLIENT_EMAIL);
-console.log("Key Exists?:", !!process.env.FIREBASE_PRIVATE_KEY);
-
 // If any of these are undefined, the Admin SDK will throw that error.
 export const authAdmin: admin.auth.Auth = admin.auth();
 export const dbAdmin: admin.firestore.Firestore = admin.firestore();

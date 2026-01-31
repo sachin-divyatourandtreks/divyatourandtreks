@@ -36,9 +36,6 @@ const fetchUserProfile = async (): Promise<UserProfile> => {
 const ProfilePage = () => {
   const authUser = useAuthStore((state) => state.user);
 
-  console.log("Zustand Auth User:", authUser);
-
-
   return (
     <div>
       {authUser && (

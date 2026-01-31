@@ -58,7 +58,6 @@ export const updateInfo = async (token: string, data: any) => {
     );
 
     if (!updatedUser) {
-      console.log("User not found or update failed");
       return NextResponse.json(
             { success: false, message: "User not found or update failed" },
             { status: 400 }

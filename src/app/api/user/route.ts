@@ -44,7 +44,6 @@ export async function GET(req: NextRequest) {
     const joinedDate = new Date(user.createdAt || Date.now());
     const currentDate = new Date();
     let yearsActive = currentDate.getFullYear() - joinedDate.getFullYear();
-    console.log("Username: ", user.username);
     const formattedUser = {
       name: user.fullName,
       username: user.username || "Mountain Trekker", 
@@ -99,7 +98,6 @@ export async function PUT(req: NextRequest) {
 
     const uid = await verifySession(token);
     const cleanUpdateData: any = await UserModel.findOne({firebaseId: uid});
-    console.log("User: ", cleanUpdateData);
     if (body.name) cleanUpdateData.fullName = body.fullName;
     if (body.username) cleanUpdateData.username = body.username;
     if (body.phone) cleanUpdateData.phoneNo = body.phoneNo;
@@ -112,7 +110,6 @@ export async function PUT(req: NextRequest) {
     }
 
     const updatedUser = await updateInfo(token, cleanUpdateData);
-    console.log("user updated successfully: ", updateInfo);
     return NextResponse.json({ success: true, user: updatedUser }, { status: 200 });
 
   } catch (error: any) {
