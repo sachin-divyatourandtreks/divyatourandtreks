@@ -9,6 +9,8 @@ import { Footer } from "@/components/global/Footer";
 import React from "react";
 import ReactQueryProvider from "@/tanstack-query";
 
+import Script from 'next/script'
+
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
@@ -43,6 +45,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body>
+
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-NK5M0DZ9VK"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-NK5M0DZ9VK');
+          `}
+        </Script>
+
         <ReactQueryProvider>
 
         <BackgroundImage />
