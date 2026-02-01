@@ -1,1 +1,1 @@
-Trekly
+Divya Tour and Treks
