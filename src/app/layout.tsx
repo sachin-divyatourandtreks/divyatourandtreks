@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   },
   description: "Book the best Nag Tibba Trek package from Dehradun. 2-Day weekend snow trek via Pantwari Village. Includes transport, meals, camping gear, and guide.",
   keywords: [
+    "Nag Tibba",
+    "Nag Tibba trek",
+    "Nag Tibba trek pictures",
+    "Nag Tibba trek exeperience",
     "Nag Tibba trek booking",
     "Nag Tibba trek from Dehradun",
     "Pantwari to Nag Tibba distance",
@@ -28,6 +32,13 @@ export const metadata: Metadata = {
     "Divya Tour and Treks",
     "best snow trek in Uttarakhand",
     "Nag Tibba trek cost",
+    "Nag Tibba trek package",
+    "Nag Tibba trek difficulty",
+    "Nag Tibba trek guide",
+    "Nag Tibba trek itinerary",
+    "Nag Tibba trek best time",
+    "Nag Tibba trek reviews",
+    "Nag Tibba summit",
   ],
   authors: [{ name: "Divya Tour and Treks" }],
   creator: "Divya Tour and Treks",
@@ -38,11 +49,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Nag Tibba Trek - Weekend Snow Trek from Dehradun',
     description: 'Join our premium Nag Tibba trek starting from Dehradun. Complete package including transport, food, and camping.',
-    url: 'https://divyatourandtreks.in',
+    url: 'https://www.divyatourandtreks.in',
     siteName: 'Divya Tour and Treks',
     images: [
       {
-        url: '/images/img6.jpeg',
+        url: '/Search_Poster.jpeg',
         width: 1200,
         height: 630,
         alt: 'Nag Tibba Summit View',
@@ -69,8 +80,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/icon.svg',
-    apple: '/icon.png',
+    icon: '/icon.jpeg',
+    apple: '/icon.jpeg',
   },
   verification: {
     google: `${process.env.NEXT_PUBLIC_GOOGLE_SEARCH_CONSOLE_ID}`, // TODO: Add this from Google Search Console
