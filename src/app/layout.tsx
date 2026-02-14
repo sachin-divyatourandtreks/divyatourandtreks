@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 export const metadata: Metadata = {
   metadataBase: new URL('https://divyatourandtreks.in'),
   title: {
-    default: "Nag Tibba Trek from Dehradun | Divya Tour and Treks",
+    default: "Nag Tibba Trek  | Book Now ₹2500",
     template: "%s | Divya Tour and Treks",
   },
   description: "Book the best Nag Tibba Trek package from Dehradun. 2-Day weekend snow trek via Pantwari Village. Includes transport, meals, camping gear, and guide.",
