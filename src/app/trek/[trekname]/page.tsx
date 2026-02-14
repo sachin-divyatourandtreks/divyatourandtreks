@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fullUrl = `${baseUrl}${currentPath}`;
 
   return {
-    title: `${trekNameReadable} Package`,
+    title: `${trekNameReadable} Package | Book Now ₹2500`,
     description: `Book the best ${trekNameReadable} package from Dehradun. 2 Days / 1 Night. Includes transport, meals, camping gear, and guide.`,
     
     keywords: [
